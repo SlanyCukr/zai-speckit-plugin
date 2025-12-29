@@ -1,25 +1,31 @@
-# dev-workflow
+# zai-speckit-plugin
 
-A Claude Code plugin providing specialized agents, commands, skills, and hooks for efficient coding sessions.
+A Claude Code plugin for delegating work to **Z.AI GLM-4.7** powered subagents, with **speckit** integration.
+
+## Overview
+
+This plugin implements a delegation-first workflow where Claude orchestrates while subagents (routed to Z.AI's GLM-4.7 via a proxy) execute the actual work. The agents are specifically prompted to work well with GLM-4.7's capabilities.
+
+### How It Works
+
+1. **Claude as Orchestrator**: The main Claude session plans and coordinates
+2. **Proxy Routing**: A separate proxy intercepts subagent requests and routes them to Z.AI
+3. **GLM-4.7 Execution**: Subagents run on GLM-4.7 for cost-effective, high-quality execution
+4. **Speckit Integration**: Hooks automatically inject subagent recommendations for speckit commands
 
 ## Installation
 
-### Option 1: Using the plugin directory flag (for testing)
-```bash
-claude --plugin-dir /path/to/dev-workflow-plugin
-```
-
-### Option 2: Add to settings.json
+### Add to settings.json
 ```json
 {
   "enabledPlugins": {
-    "dev-workflow@dev-workflow-local": true
+    "zai-speckit-plugin@zai-speckit": true
   },
   "extraKnownMarketplaces": {
-    "dev-workflow-local": {
+    "zai-speckit": {
       "source": {
         "source": "github",
-        "repo": "slanycukr/dev-workflow"
+        "repo": "SlanyCukr/zai-speckit-plugin"
       }
     }
   }
@@ -28,10 +34,10 @@ claude --plugin-dir /path/to/dev-workflow-plugin
 
 ## Components
 
-### Agents
+### Agents (GLM-4.7 Optimized)
 
-| Agent | Description | Model |
-|-------|-------------|-------|
+| Agent | Description | Model Hint |
+|-------|-------------|------------|
 | `build-agent` | Implements code changes with focused task execution | opus |
 | `code-reviewer` | Reviews code for bugs/quality (>=80% confidence threshold) | opus |
 | `root-cause-agent` | Diagnoses failures with systematic evidence gathering | opus |
@@ -44,32 +50,62 @@ claude --plugin-dir /path/to/dev-workflow-plugin
 
 | Command | Description |
 |---------|-------------|
-| `/dev-workflow:analyze-session <session-id>` | Analyze session transcripts to suggest skill/workflow improvements |
-| `/dev-workflow:feature-dev <description>` | Context-efficient feature development workflow |
+| `/zai-speckit-plugin:analyze-session <session-id>` | Analyze session transcripts to suggest improvements |
+| `/zai-speckit-plugin:feature-dev <description>` | Context-efficient feature development workflow |
 
 ### Skills
 
 | Skill | Description |
 |-------|-------------|
-| `jira` | Interact with Jira issues using jira-cli with token-efficient output |
+| `jira` | Interact with Jira issues using jira-cli |
 
 ### Hooks
 
 | Hook | Event | Description |
 |------|-------|-------------|
-| Speckit Subagent Context | UserPromptSubmit | Injects subagent guidance for speckit commands |
-| Bash Output Monitor | PostToolUse | Token efficiency reminder when Bash output exceeds 30 lines |
-| Honesty Validator | SubagentStop | Validates subagent work follows "Honesty Over Completion" principle |
-| Session Context | SessionStart | Injects subagent usage reminders |
+| **Speckit Subagent Context** | UserPromptSubmit | Detects speckit commands and injects appropriate subagent recommendations |
+| **Bash Output Monitor** | PostToolUse | Token efficiency reminder when output exceeds 30 lines |
+| **Honesty Validator** | SubagentStop | Validates subagent work follows "Honesty Over Completion" principle |
+| **Session Context** | SessionStart | Injects subagent usage reminders |
+
+## Speckit Integration
+
+When you use speckit commands, the plugin automatically injects guidance:
+
+- `speckit.specify` → Recommends `Explore` subagent for pattern discovery
+- `speckit.clarify` → Recommends `web-research` and `context7-docs`
+- `speckit.plan` → Recommends parallel exploration with multiple subagents
+- `speckit.implement` → Recommends delegating tasks to `build-agent` subagents
+- `speckit.tasks` → Recommends `Explore` for file structure understanding
 
 ## Philosophy
 
-This plugin implements the **Subagent Usage Philosophy**:
+### Delegation First
+- **Main session context is precious** - every token counts
+- **Subagents run in isolation** - their token usage doesn't pollute main context
+- **Parallelization** - run 2-3 subagents simultaneously for efficiency
 
-- **Context Preservation**: Main session orchestrates, subagents execute heavy work
-- **Small Chunks**: Each subagent gets ONE focused task
-- **Honesty Over Completion**: Partial work with clear reporting is success; silent gaps are failure
-- **Early Bail Pattern**: Subagents return early if task is unclear, too broad, or confidence is low
+### Small Chunks Only
+Give each subagent ONE focused task. Large chunks lead to:
+- Lazy implementations
+- Quality degradation
+- Silently skipped steps
+
+### Honesty Over Completion
+- Not completing work is NOT an error
+- The only error is claiming "done" when steps were skipped
+- Partial work with clear reporting is SUCCESS
+
+### Early Bail Pattern
+Subagents should return early (without doing work) if:
+- Task is unclear → ask for clarification
+- Task is too broad → suggest how to split
+- Confidence is low → explain concerns
+
+## Related Projects
+
+- **Proxy**: Separate repository that intercepts Claude Code requests and routes subagent calls to Z.AI
+- **Speckit**: GitHub-based specification workflow that pairs with this plugin
 
 ## License
 

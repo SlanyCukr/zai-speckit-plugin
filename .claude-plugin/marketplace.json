@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0.0",
-  "name": "dev-workflow-local",
+  "name": "zai-speckit",
   "plugins": [
     {
-      "id": "dev-workflow",
-      "name": "Development Workflow Tools",
-      "description": "Specialized agents, commands, skills, and hooks for efficient coding sessions",
+      "id": "zai-speckit-plugin",
+      "name": "Z.AI Speckit Plugin",
+      "description": "Delegate work to Z.AI GLM-4.7 powered subagents with speckit integration",
       "version": "1.0.0",
       "author": {
         "name": "slanycukr"

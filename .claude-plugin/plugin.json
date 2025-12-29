@@ -1,12 +1,12 @@
 {
-  "name": "dev-workflow",
-  "description": "Development workflow tools: specialized agents, commands, skills, and hooks for efficient coding sessions",
+  "name": "zai-speckit-plugin",
+  "description": "Claude Code plugin for delegating work to Z.AI GLM-4.7 powered subagents, with speckit integration",
   "version": "1.0.0",
   "author": {
     "name": "slanycukr"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SlanyCukr/dev-workflow"
+    "url": "https://github.com/SlanyCukr/zai-speckit-plugin"
   }
 }
