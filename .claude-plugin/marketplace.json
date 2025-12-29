@@ -1,19 +1,14 @@
 {
   "schemaVersion": "1.0.0",
   "name": "zai-speckit",
+  "owner": {
+    "name": "slanycukr"
+  },
   "plugins": [
     {
-      "id": "zai-speckit-plugin",
-      "name": "Z.AI Speckit Plugin",
+      "name": "zai-speckit-plugin",
       "description": "Delegate work to Z.AI GLM-4.7 powered subagents with speckit integration",
-      "version": "1.0.0",
-      "author": {
-        "name": "slanycukr"
-      },
-      "source": {
-        "type": "local",
-        "path": "."
-      }
+      "source": "./"
     }
   ]
 }

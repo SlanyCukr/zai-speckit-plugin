@@ -5,8 +5,5 @@
   "author": {
     "name": "slanycukr"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/SlanyCukr/zai-speckit-plugin"
-  }
+  "repository": "https://github.com/SlanyCukr/zai-speckit-plugin"
 }
