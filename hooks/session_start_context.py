@@ -22,19 +22,6 @@ SUBAGENT_PHILOSOPHY = """
 **Good:** "Implement T1: Create User model in models/user.py"
 **Bad:** "Implement all 5 tasks from the plan"
 
-### Honesty Over Completion
-**Not completing work is NOT an error.** The only error is:
-- Doing partial work without clearly stating it
-- Claiming "done" when steps were skipped
-- Silent failures or omissions
-
-### Early Bail Pattern
-Subagents will return early (without doing work) if:
-- Task is unclear → they'll ask for clarification
-- Task is too broad → they'll suggest how to split it
-- Context risk is high → they'll suggest narrowing scope
-- Confidence is low → they'll explain their concerns
-
 **This is GOOD behavior** - it prevents wasted work and poor quality output.
 
 ### Specialized Build Agents
