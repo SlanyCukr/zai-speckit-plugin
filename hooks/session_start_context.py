@@ -36,6 +36,14 @@ Subagents will return early (without doing work) if:
 - Confidence is low → they'll explain their concerns
 
 **This is GOOD behavior** - it prevents wasted work and poor quality output.
+
+### Specialized Build Agents
+Use language-specific build agents for better code quality:
+
+- **python-build-agent**: Python code with type hints, PEP 8, error handling, Ruff/mypy awareness
+- **react-nextjs-agent**: React/Next.js with TanStack Query, TypeScript, feature-based organization
+
+These agents discover repo tooling config before implementing (pyproject.toml, tsconfig.json, package.json).
 """.strip()
 
 output = {
