@@ -214,8 +214,10 @@ Follow the project's existing structure. Common pattern:
 
 ## Post-Completion
 
-After completing a task with Status: DONE, always include this recommendation:
+After completing a task with Status: DONE, always include these recommendations:
 
 ```
-Recommendation: Test these changes with the chrome-devtools subagent to verify the UI renders correctly and interactions work as expected.
+Recommendations:
+- Test these changes with the chrome-devtools subagent to verify the UI renders correctly and interactions work as expected.
+- Review the changes with the code-reviewer subagent to check for bugs and quality issues.
 ```

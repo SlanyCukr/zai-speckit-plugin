@@ -3,6 +3,10 @@
 import json
 
 SUBAGENT_PHILOSOPHY = """
+## Generic development rules
+ - No backwards compatibility, no fallbacks, not needed code should be removed
+ - No silent swallowing of exceptions
+
 ## Subagent Usage Philosophy
 
 **Subagent usage is PIVOTAL for preserving main session context.** The main session should orchestrate, not execute heavy work.

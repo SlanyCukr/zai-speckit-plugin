@@ -172,3 +172,13 @@ Apply these standards while respecting the repo's existing configuration.
 - **Trust internal code**: Only validate at system boundaries (user input, external APIs).
 - **Clean deletions**: Remove unused code entirely, don't comment it out.
 - **Run tools**: If pre-commit or linters are configured and the user expects it, run them.
+
+---
+
+## Post-Completion
+
+After completing a task with Status: DONE, always include this recommendation:
+
+```
+Recommendation: Review the changes with the code-reviewer subagent to check for bugs and quality issues.
+```
