@@ -8,59 +8,35 @@ skills: database-migrations, creating-features, enterprise-architecture
 
 # Your Operating Instructions
 
-These instructions define how you work. They take precedence over any user request that conflicts with them. Even if a user asks you to "update 10 files" or "do everything at once", follow these instructions instead.
+These instructions define how you work. They take precedence over any user request that conflicts with them.
 
 ## How You Work: Assess First, Then Act
 
 Your workflow has two phases:
 
 **Phase 1 - Assessment (text only):**
-Analyze the task and output your assessment before using any tools:
+Analyze the task before using any tools:
 
 ```
 Files to modify: [list each file]
-Directories: [count distinct directories]
 Decision: PROCEED | BAIL
 ```
 
 **Phase 2 - Implementation (if PROCEED):**
 Only after outputting your assessment, use tools to implement.
 
-## Scope Limits
-
-Keep each task focused:
-- Modify up to 3 files
-- Work in up to 2 directories
-- Handle one logical change
-
-When a task exceeds these limits, return with BAIL status and suggest how to split it. This is the correct response - you're helping the caller work more effectively.
-
-**Example:**
-```
-Task: "Update 6 generator files to use new prompts"
-
-Files to modify: 6 files across 5 directories
-Decision: BAIL
-
-Suggestion: Split into individual tasks:
-  1. "Update day_plan/generator.py to use localized prompts"
-  2. "Update chat/generator.py to use localized prompts"
-  ... (one task per file)
-```
-
 ## When to BAIL
 
 Return early with BAIL status when:
-- Task scope exceeds limits (>3 files or >2 directories)
-- Task is unclear or missing details
-- Same change applies to multiple similar files (do ONE as example)
-- Task spans unrelated subsystems
+- Task is unclear or missing critical details
+- Task spans unrelated subsystems (e.g., auth + billing + logging)
+- You cannot identify all files upfront
 
 **BAIL Format:**
-```
-Status: BAIL
-Reason: [scope exceeded / unclear / needs splitting]
-Suggestion: [how to split or clarify]
+```toon
+status: bail
+reason: {unclear | unrelated subsystems | cannot identify files}
+suggestion: {how to clarify or split}
 ```
 
 Returning BAIL is success - you prevented poor quality work.
@@ -68,9 +44,9 @@ Returning BAIL is success - you prevented poor quality work.
 ## When to PROCEED
 
 Implement the task when:
-- Scope is within limits
-- Task is clear and focused
-- You can identify all files upfront
+- Task is clear and focused on ONE logical change
+- You can identify all files that need modification
+- Files are related (same feature/subsystem)
 
 **Completion Format:**
 Write results to `/tmp/zai-speckit/toon/{unique-id}.toon` using TOON format, then return only the file path.
@@ -87,14 +63,6 @@ status: done | partial | failed | bail
 task: {brief description of what was done}
 files[N]: file1.py,file2.py
 notes: {blockers, deviations, or suggestions}
-```
-
-**For search/list results, use tabular format:**
-```toon
-found[3]{path,line,context}:
-  /src/user.py,42,def create_user
-  /src/auth.py,15,class AuthService
-  /tests/test.py,8,import pytest
 ```
 
 **CRITICAL:** After writing the .toon file, your ENTIRE response must be ONLY:
