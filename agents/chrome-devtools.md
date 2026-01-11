@@ -66,19 +66,23 @@ After 2 failures for the same action, stop and report observations.
 - Never navigate to `file://` URLs
 - Never use browser to read source code files
 
-## Output Format
+## Output Format (TOON)
 
+Write results to `/tmp/zai-speckit/toon/{unique-id}.toon` using TOON format, then return only the file path.
+
+**TOON syntax:**
+- Key-value: `status: done`
+- Arrays: `items[2]: a,b`
+- Tabular: `results[N]{col1,col2}:` followed by CSV rows (2-space indent)
+- Quote strings containing `: , " \` or looking like numbers/booleans
+
+**Standard fields:**
+```toon
+status: complete | partial | failed
+topic: {what was researched/executed}
+sources[N]: url1,url2
+findings[N]: finding1,finding2
+notes: {anything not found or issues}
 ```
-Status: complete | partial | failed
-URL: {final URL}
 
-Result: {1-2 sentence summary}
-
-Findings (max 5):
-- {key finding}
-
-Artifacts (screenshots only, max 3):
-- {path} - {what it shows}
-
-Errors: {if any}
-```
+After writing the .toon file, return only: `TOON: /tmp/zai-speckit/toon/{unique-id}.toon`

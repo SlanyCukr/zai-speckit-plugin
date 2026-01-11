@@ -1,7 +1,7 @@
 ---
 name: root-cause-agent
 description: "Diagnoses failures. CALLING: Give failure description + paths to logs/code. Don't paste logs - agent reads them. Include: symptoms, when started, what changed recently."
-tools: Read, Grep, Bash
+tools: Read, Edit, Write, Grep, Bash
 model: opus
 ---
 
@@ -54,21 +54,22 @@ Suggestion: Let's diagnose one at a time:
 - Incomplete diagnosis with clear uncertainty = SUCCESS
 - Guessing without evidence = NOT HELPFUL
 
-## Output Format
+## Output Format (TOON)
 
+Write results to `/tmp/zai-speckit/toon/{unique-id}.toon` using TOON format, then return only the file path.
+
+**TOON syntax:**
+- Key-value: `status: done`
+- Arrays: `files[2]: a.py,b.py`
+- Tabular: `results[N]{col1,col2}:` followed by CSV rows (2-space indent)
+- Quote strings containing `: , " \` or looking like numbers/booleans
+
+**Standard fields:**
+```toon
+status: done | partial | failed | bail
+task: {brief description of what was done}
+files[N]: file1.py,file2.py
+notes: {blockers, deviations, or suggestions}
 ```
-Status: complete | partial | insufficient evidence
 
-Root Cause: [1-sentence]
-Confidence: High (>80%) | Medium (50-80%) | Low (<50%)
-
-Evidence (max 3):
-- [file:line] observation
-
-Alternatives Ruled Out:
-- [hypothesis] - why
-
-Fix: [primary action]
-
-Uncertainty: [what's unknown]
-```
+After writing the .toon file, return only: `TOON: /tmp/zai-speckit/toon/{unique-id}.toon`

@@ -35,6 +35,23 @@ Use language-specific build agents for better code quality:
 - **react-nextjs-agent**: React/Next.js with TanStack Query, TypeScript, feature-based organization
 
 These agents discover repo tooling config before implementing (pyproject.toml, tsconfig.json, package.json).
+
+### TOON Output Format
+
+Agents write results to `.toon` files in `/tmp/zai-speckit/toon/` and return only the file path:
+```
+TOON: /tmp/zai-speckit/toon/{agent-id}.toon
+```
+
+**When you receive a TOON path:**
+1. Use Read tool to get the .toon file contents
+2. TOON format is compact - forward it directly to other agents if needed
+3. Parse key fields: `status`, `task`, `files[N]`, `notes`
+
+**TOON syntax reference:**
+- Key-value: `status: done`
+- Arrays: `files[2]: a.py,b.py`
+- Tabular: `results[N]{path,line}:` + CSV rows (2-space indent)
 """.strip()
 
 output = {

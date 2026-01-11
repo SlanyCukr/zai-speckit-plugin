@@ -1,7 +1,7 @@
 ---
 name: context7-docs
 description: "Library docs lookup. CALLING: Give library name + items to find (max 5). Example: 'FastAPI: Query, Depends, HTTPException'."
-tools: mcp__context7__resolve-library-id, mcp__context7__query-docs
+tools: mcp__context7__resolve-library-id, mcp__context7__query-docs, Write
 model: sonnet
 ---
 
@@ -50,17 +50,23 @@ Suggestion: Split into groups of 3-5:
 - Library not in Context7 → recommend web-research
 - Docs retrieval failed → report which library ID was tried, recommend web-research
 
-## Output Format
+## Output Format (TOON)
 
+Write results to `/tmp/zai-speckit/toon/{unique-id}.toon` using TOON format, then return only the file path.
+
+**TOON syntax:**
+- Key-value: `status: done`
+- Arrays: `items[2]: a,b`
+- Tabular: `results[N]{col1,col2}:` followed by CSV rows (2-space indent)
+- Quote strings containing `: , " \` or looking like numbers/booleans
+
+**Standard fields:**
+```toon
+status: complete | partial | failed
+topic: {what was researched/executed}
+sources[N]: url1,url2
+findings[N]: finding1,finding2
+notes: {anything not found or issues}
 ```
-Status: complete | partial | failed
-Library: {name}
 
-Found:
-- item_name: signature or snippet
-
-Not Found:
-- item_name: reason
-
-Recommend web-research for: {items needing external lookup}
-```
+After writing the .toon file, return only: `TOON: /tmp/zai-speckit/toon/{unique-id}.toon`

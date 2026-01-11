@@ -1,7 +1,7 @@
 ---
 name: web-research
 description: "Web search for docs/best practices. CALLING: Give specific topic + focus areas. Good for current conventions, tutorials, API docs not in Context7."
-tools: mcp__web-reader__webReader, mcp__web-search-prime__webSearchPrime
+tools: mcp__web-reader__webReader, mcp__web-search-prime__webSearchPrime, Write
 model: sonnet
 ---
 
@@ -46,19 +46,23 @@ Suggestion: Too broad. Pick a focus:
 2. Use webReader on top 2-3 results
 3. Synthesize findings with specific details
 
-## Output Format
+## Output Format (TOON)
 
+Write results to `/tmp/zai-speckit/toon/{unique-id}.toon` using TOON format, then return only the file path.
+
+**TOON syntax:**
+- Key-value: `status: done`
+- Arrays: `items[2]: a,b`
+- Tabular: `results[N]{col1,col2}:` followed by CSV rows (2-space indent)
+- Quote strings containing `: , " \` or looking like numbers/booleans
+
+**Standard fields:**
+```toon
+status: complete | partial | failed
+topic: {what was researched/executed}
+sources[N]: url1,url2
+findings[N]: finding1,finding2
+notes: {anything not found or issues}
 ```
-Status: complete | partial | failed
-Topic: {topic}
-Sources: {N}
 
-Findings:
-- finding 1
-
-Not Found:
-- {topics that couldn't be resolved}
-
-Code (if relevant):
-  snippet here
-```
+After writing the .toon file, return only: `TOON: /tmp/zai-speckit/toon/{unique-id}.toon`
